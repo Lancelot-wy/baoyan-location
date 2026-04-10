@@ -1,0 +1,45 @@
+databases:
+  - name: baoyan-db
+    databaseName: baoyan_db
+    user: baoyan
+    plan: free
+    postgresMajorVersion: "16"
+    ipAllowList: []
+
+services:
+  - type: web
+    name: baoyan-backend
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --timeout-keep-alive 300
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: baoyan-db
+          property: connectionString
+      - key: LLM_API_KEY
+        sync: false  # Set manually in Render dashboard
+      - key: LLM_BASE_URL
+        value: https://openrouter.ai/api/v1
+      - key: LLM_MODEL
+        value: deepseek/deepseek-chat-v3-0324
+      - key: APP_ENV
+        value: production
+      - key: REDIS_URL
+        value: redis://localhost:6379
+      - key: PYTHONPATH
+        value: /opt/render/project/src
+
+  - type: web
+    name: baoyan-frontend
+    runtime: node
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://baoyan-backend.onrender.com
