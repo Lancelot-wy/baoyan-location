@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Environment
+.env
+.env.local
+*.env
+
+# Node
+node_modules/
+.next/
+dist/
+out/
+*.log
+
+# Data (don't commit raw data or uploads)
+data/raw/
+data/uploads/
+data/processed/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
+*.sqlite
+*.db
+
+# Docker
+.docker/
